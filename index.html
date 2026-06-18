@@ -3,14 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Website</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Kane Parsons Obby</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        *, input, button, textarea, select {
+            font-family: 'Inter', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #e4e6a8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+
+            background-image: url('wallpaper.png'); 
+            
+            /* Tiles the image horizontally and vertically */
+            background-repeat: repeat; 
+            
+            /* Optional: Controls the size of each tile */
+            background-size: 100px 100px; 
+        }
+        #riddle-container {
+            width: 100%;
+            max-width: 600px;
+        }
+        .riddle-card {
+            background: (0,0,0,0);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-in;
+        }
+        .riddle-card img {
+            width: 100%;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #e4e6a8;
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        h1 {
+            font-size: 3em;
+        }
+        .spacer {
+            height: 800vh;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My Website!</h1>
-    <p>This page is successfully hosted for free on GitHub Pages.</p>
-    <button id="alertBtn">Click Me</button>
 
-    <script src="script.js"></script>
+    <div class="spacer"></div>
+    <h1>Backrooms 2</h1>
+    <div id="riddle-container"></div>
+
+    <script>
+        const riddleData = [
+            { image: '/riddles/kp1.png', answers: ['towel', 'a towel'] },
+            { image: '/riddles/kp2.png', answers: ['cambodia', 'kampuchea'] },
+            { image: '/riddles/kp3.png', answers: ['12.5', '25/2'] },
+            { image: '/riddles/kp4.png', answers: ['avatar'] },
+            { image: '/riddles/kp5.png', answers: ['queue'] },
+            { image: '/riddles/kp6.png', answers: ['fusion'] },
+            { image: '/riddles/kp7.png', answers: ['cover'] },
+            { image: '/riddles/kp8.png', answers: ['sneaky'] },
+            { image: '/riddles/kp9.png', answers: ['inventory'] },
+            { image: '/riddles/kp10.png', answers: ['Yatagarasu'] },
+            { image: '/riddles/kp11.png', answers: ['quintessential'] },
+            { image: '/riddles/kp12.png', answers: ['Oppenheimer big chin Trailer HD'] },
+            { image: '/riddles/kp13.png', answers: ['indigo'] },
+            { image: '/riddles/kp14.png', answers: ['noise'] },
+            { image: '/riddles/kp15.png', answers: ['50', 'fifty', 'five zero', '5 0'] },
+            { image: '/riddles/kp16.png', answers: ['moon', 'croissant', 'the moon'] },
+            { image: '/riddles/kp17.png', answers: ['icup', 'i see you pee'] },
+            { image: '/riddles/kp18.png', answers: ['LFS', 'live for speed'] },
+            { image: '/riddles/kp19.png', answers: ['narcissus'] },
+            { image: '/riddles/kp20.png', answers: ['Backrooms', 'The Backrooms'] },
+            { image: '/riddles/kp21.png', answers: ['Slow Dance'] },
+            { image: '/riddles/kp22.png', answers: ['566574'] }/*
+            { image: '/riddles/kp23.png', answers: ['k9TYwnFG121L0LwHazip85p3b7sCvj5Dg69rvX123456790iL05shhhhR'] }
+            { image: '/riddles/kp24.png', answers: ['Byzantine', 'Byzantine Empire'] }
+            { image: '/riddles/kp25.png', answers: ['MCompressor'] }*/
+        ];
+
+        let currentStep = 0;
+        const container = document.getElementById('riddle-container');
+
+        function createRiddleElement(index) {
+            const data = riddleData[index];
+            const div = document.createElement('div');
+            div.className = 'riddle-card';
+            div.id = `step-${index}`;
+            
+            div.innerHTML = `
+                <img src="${data.image}" alt="Riddle ${index + 1}">
+                <form class="input-group" onsubmit="event.preventDefault(); checkAnswer(${index});">
+                    <input type="text" id="input-${index}" placeholder="Type your answer...">
+                    <button type="submit" id="btn-${index}">Submit</button>
+                </form>
+            `;
+            container.appendChild(div);
+        }
+
+        function checkAnswer(index) {
+            const input = document.getElementById(`input-${index}`);
+            const button = document.getElementById(`btn-${index}`);
+            const userAnswer = input.value.trim().toLowerCase();
+
+            // Use .some() to check if any answer matches when both are lowercased
+            const isCorrect = riddleData[index].answers.some(ans => ans.toLowerCase() === userAnswer);
+
+            if (isCorrect) {
+                input.disabled = true;
+                button.disabled = true;
+                button.innerText = "Correct!";
+                
+                if (index + 1 < riddleData.length) {
+                    createRiddleElement(index + 1);
+                } else {
+                    alert("Congratulations! You've finished the obby!");
+                }
+            } else {
+                alert("Incorrect. Try again!");
+            }
+        }
+
+        // Initialize the first riddle
+        createRiddleElement(0);
+    </script>
 </body>
 </html>
