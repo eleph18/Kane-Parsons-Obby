@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kane Parsons Obby</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
     <style>
-        *, input, button, textarea, select {
+        *,
+        input,
+        button,
+        textarea,
+        select {
             font-family: 'Inter', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         body {
             background-color: #e4e6a8;
             display: flex;
@@ -18,41 +26,47 @@
             align-items: center;
             padding: 20px;
 
-            background-image: url('wallpaper.png'); 
-            
+            background-image: url('wallpaper.png');
+
             /* Tiles the image horizontally and vertically */
-            background-repeat: repeat; 
-            
+            background-repeat: repeat;
+
             /* Optional: Controls the size of each tile */
-            background-size: 100px 100px; 
+            background-size: 100px 100px;
         }
+
         #riddle-container {
             width: 100%;
             max-width: 600px;
         }
+
         .riddle-card {
-            background: (0,0,0,0);
+            background: (0, 0, 0, 0);
             padding: 20px;
             margin-bottom: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             animation: fadeIn 0.5s ease-in;
         }
+
         .riddle-card img {
             width: 100%;
             border-radius: 4px;
             margin-bottom: 15px;
         }
+
         .input-group {
             display: flex;
             gap: 10px;
         }
+
         input[type="text"] {
             flex-grow: 1;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         button {
             padding: 10px 20px;
             background-color: #e4e6a8;
@@ -61,18 +75,22 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         button:disabled {
             background-color: #ccc;
         }
+
         h1 {
             font-size: 3em;
         }
+
         .spacer {
             height: 800vh;
             width: 100%;
         }
     </style>
 </head>
+
 <body>
 
     <div class="spacer"></div>
@@ -92,7 +110,7 @@
             { image: 'riddles/kp9.png', answers: ['inventory'] },
             { image: 'riddles/kp10.png', answers: ['Yatagarasu'] },
             { image: 'riddles/kp11.png', answers: ['quintessential'] },
-            { image: 'riddles/kp12.png', answers: ['Oppenheimer big chin Trailer HD'] },
+            { image: 'riddles/kp12.png', answers: ['Oppenheimer big chin Trailer HD'], link: 'https://www.youtube.com/watch?v=K78-EDj70TA' },
             { image: 'riddles/kp13.png', answers: ['indigo'] },
             { image: 'riddles/kp14.png', answers: ['noise'] },
             { image: 'riddles/kp15.png', answers: ['50', 'fifty', 'five zero', '5 0'] },
@@ -104,8 +122,10 @@
             { image: 'riddles/kp21.png', answers: ['Slow Dance'] },
             { image: 'riddles/kp22.png', answers: ['566574'] },
             { image: 'riddles/kp23.png', answers: ['k9TYwnFG121L0LwHazip85p3b7sCvj5Dg69rvX123456790iL05shhhhR'] },
-            { image: 'riddles/kp24.png', answers: ['Byzantine', 'Byzantine Empire'] }/*
-            { image: 'riddles/kp25.png', answers: ['MCompressor'] }*/
+            { image: 'riddles/kp24.png', answers: ['Byzantine', 'Byzantine Empire'] },
+            { image: 'riddles/kp25.png', answers: ['MCompressor'] },
+            { image: 'riddles/kp26_start_edit.png', answers: ['wildlife'] },
+            { image: 'riddles/kp26_finish.png', answers: ['wildlife'] },
         ];
 
         let currentStep = 0;
@@ -116,9 +136,13 @@
             const div = document.createElement('div');
             div.className = 'riddle-card';
             div.id = `step-${index}`;
-            
+
+            const imgHtml = data.link
+                ? `<a href="${data.link}" target="_blank" rel="noopener noreferrer"><img src="${data.image}" alt="Riddle ${index + 1}"></a>`
+                : `<img src="${data.image}" alt="Riddle ${index + 1}">`;
+
             div.innerHTML = `
-                <img src="${data.image}" alt="Riddle ${index + 1}">
+                ${imgHtml}
                 <form class="input-group" onsubmit="event.preventDefault(); checkAnswer(${index});">
                     <input type="text" id="input-${index}" placeholder="Type your answer...">
                     <button type="submit" id="btn-${index}">Submit</button>
@@ -139,14 +163,22 @@
                 input.disabled = true;
                 button.disabled = true;
                 button.innerText = "Correct!";
-                
+
+                // When kp25 (index 24) is solved, toggle kp1's image to kp1_end.png
+                if (index === 24) {
+                    const kp1Img = document.querySelector('#step-0 img');
+                    if (kp1Img) {
+                        kp1Img.src = 'riddles/kp1_end.png';
+                    }
+                }
+
                 if (index + 1 < riddleData.length) {
                     createRiddleElement(index + 1);
                 } else {
-                    alert("Congratulations! You've finished the obby!");
+                    alert("Good Gob");
                 }
             } else {
-                alert("Incorrect. Try again!");
+                alert("you suck -eleph");
             }
         }
 
@@ -154,4 +186,5 @@
         createRiddleElement(0);
     </script>
 </body>
+
 </html>
