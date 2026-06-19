@@ -88,6 +88,13 @@
             height: 800vh;
             width: 100%;
         }
+
+        .final-image {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            border-radius: 4px;
+        }
     </style>
 </head>
 
@@ -125,8 +132,10 @@
             { image: 'riddles/kp24.png', answers: ['Byzantine', 'Byzantine Empire'] },
             { image: 'riddles/kp25.png', answers: ['MCompressor'] },
             { image: 'riddles/kp26_start_edit.png', answers: ['wildlife'] },
-            { image: 'riddles/kp26_finish.png', answers: ['wildlife'] },
         ];
+
+        const FINAL_IMAGE = 'riddles/kp26_finish.png';
+        const FINAL_MP3 = 'riddles/takeflight_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final_final.mp3';
 
         let currentStep = 0;
         const container = document.getElementById('riddle-container');
@@ -149,6 +158,19 @@
                 </form>
             `;
             container.appendChild(div);
+        }
+
+        function createFinalElement() {
+            const div = document.createElement('div');
+            div.className = 'riddle-card';
+            div.id = 'step-final';
+
+            div.innerHTML = `<img src="${FINAL_IMAGE}" alt="Final" class="final-image">`;
+            container.appendChild(div);
+
+            div.querySelector('img').addEventListener('click', function () {
+                window.open(FINAL_MP3, '_blank');
+            });
         }
 
         function checkAnswer(index) {
@@ -175,7 +197,7 @@
                 if (index + 1 < riddleData.length) {
                     createRiddleElement(index + 1);
                 } else {
-                    alert("Good Gob");
+                    createFinalElement();
                 }
             } else {
                 alert("you suck -eleph");
